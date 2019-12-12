@@ -4,6 +4,7 @@ Para empezar el proyecto se necesita crear tener lo siguiente:
   * npm 
   * node
   * mongo
+
 COMANDOS PARA COMENZAR:
   * npm install
   * npm start

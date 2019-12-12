@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Profile Page</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/css/select2.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script href="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.7/js/select2.min.js"></script>
+    
+  </head>
+  <style>
+      .login {
+        background: #56ab2f;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #004e92, #000428);/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    .signup {
+        background: #000428;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #004e92, #000428);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #004e92, #000428); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+
+    td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+    }
+    tr.shown td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+    #bienvenido{
+        color:white;
+    }
+
+    #postswrapper {
+      width: 100%;
+      height: 500px;
+      overflow-y: scroll;
+    }
+    .red{
+        background-color: red;
+    }
+    .yellow{
+        background-color: yellow;
+    }
+    .orange{
+        background-color: orange;
+    }
+    
+  </style>
+  <body>
+      <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+
+          <a class="navbar-brand mr-1" href="/">Telcel<img src="https://i.blogs.es/7f8c3e/650_1000_telcel/450_1000.jpg" style="width: 43px;height: 23px;margin-left: 20px;"></a>
+        
+          <!-- Navbar Search -->
+          <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+          </form>
+        
+          <!-- Navbar -->
+          <ul class="navbar-nav ml-auto ml-md-0">
+            <li style="margin-top: 8px;">
+              <span id="bienvenido">Bienvenido</span>
+            </li>
+          </ul>
+        
+        </nav>
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="sidebar navbar-nav toggled">
+            <li class="nav-item" id="radios">
+                <a class="nav-link" href="/index">
+                    <img src="/images/database.svg" style="width: 40px;">
+                    <span>Radiobase</span>
+                </a>
+            </li>
+           
+        </ul>
+        <!-- Sidebar-->
+        <div id="content-wrapper">
+          <div id="radios_vue" class="container-fluid">
+            <form method='post' action='/insertRadio' enctype='multipart/form-data'>
+                <div class="form-group">
+                    <label for="import_csv">Importa el CSV</label>
+                    <input type="file" class="form-control-file" id="import_csv" name='csv-radios'>
+                    <br>
+                    <button class="btn btn-primary" type='submit'>Subir CSV</button>
+                </div>
+            </form>
+            <div class="row">
+                    <table class="table table-hover table-bordered table-responsive" id="tableOfRadios">
+                        <thead>
+                        <tr>
+                            <th scope="col">#ID
+                                <input placeholder="Buscar..."  class="input_buscar" v-model="buscar_id">
+                            </th>
+                           
+                        </tr>
+                        </thead>
+                        <tbody id="radios" v-for="radio in sortedRadios">
+                            <td>{{radio._id}}</td>
+                            
+                            <td v-for="row in radio.rows">
+                                <table>
+                                    <td>{{row.fecha}}</td>
+                                    <td v-bind:class="{ red: row.trafico < 15, orange: row.trafico > 15 && row.trafico < 40, yellow: row.trafico > 40 && row.trafico <= 90, green: row.trafico > 90 }">{{row.trafico}}</td>
+                                </table>
+                            </td>
+                        </tbody>
+                    </table>
+            </div>
+
+          </div>
+          <footer class="sticky-footer">
+              <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                  <span>Proyecto Telcel/Armando Reyes Perez</span>
+                </div>
+              </div>
+          </footer>
+        </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/0.5.6/dist/progressbar.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha256-KsRuvuRtUVvobe66OFtOQfjP8WA2SzYsmm4VPfMnxms=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+  <script>
+      var radios = new Vue({
+        el: "#radios_vue",
+        data:{
+            buscar_id: '',
+            buscar_region: '',
+            scroll: 0,
+            radios:[],
+            fechas:[],
+            dateStart: new Date(2019,07,23),
+            dateEnd: new Date(2019,08,03),
+            objectRadios: [],
+            temporal: []
+        },
+        methods:{
+            getAll(){
+                $.get('/getAll',{scroll:this.scroll},(data) => {
+                       this.radios = data;
+                       this.objectRadios = this.radios;
+                        console.log(data);
+                })
+            },
+            getDate(startDate,endDate){
+                var dates = [],
+                    currentDate = startDate,
+                    addDays = function(days) {
+                        var date = new Date(this.valueOf());
+                        date.setDate(date.getDate() + days);
+                        return date;
+                    };
+                while (currentDate <= endDate) {
+                    dates.push(this.formatDate(currentDate));
+                    currentDate = addDays.call(currentDate, 1);
+                }
+                
+                this.fechas = dates;
+                
+            },
+            formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2) 
+                    month = '0' + month;
+                if (day.length < 2) 
+                    day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
+        },
+        computed:{
+            sortedRadios: function(){
+                var buscar_id = this.buscar_id;
+                var buscar_region = this.buscar_region;
+                console.log(buscar_id);
+                var radio_search = this.objectRadios;
+                if (buscar_id){
+                    return this.objectRadios.filter(radio => {
+                        return radio._id.toString().toLowerCase().match(this.buscar_id.toString().toLowerCase());
+                    });
+                }
+                
+                return radio_search;
+            }
+        },
+        mounted: function(){
+            this.getAll();
+            this.getDate(new Date(2019,00,23), new Date(2019,02,03));
+        }
+      });
+  </script>
+</html>

@@ -9,3 +9,5 @@
   # npm start
 # link para usar la app:
   # http://localhost:4000/index
+  
+Se necesita crear una base de datos que se llama telcel con una collection radiodatabases
